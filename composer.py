@@ -56,12 +56,15 @@ args = parser.parse_args()
 pipeline.initialize(args)
 
 ## decomposer : image --> reflectance, normals, lighting
-decomposer = models.Decomposer().cuda()
+
+#CUDA decomposer = models.Decomposer().cuda()
+decomposer = models.Decomposer()
 decomposer.load_state_dict( torch.load(args.decomposer) )
 ## shader : normals, lighting --> shading
 shader = torch.load(args.shader)
 ## composer : image --> reflectance, normals, lighting, shading --> image
-model = models.Composer(decomposer, shader).cuda()
+# model = models.Composer(decomposer, shader).cuda()
+model = models.Composer(decomposer, shader)
 
 ## data loader for train set, which includes half labeled and half unlabeled data
 train_set = pipeline.ComposerDataset(args.data_path, args.unlabeled, args.labeled, unlabeled_array=args.unlabeled_array, labeled_array=args.labeled_array, size_per_dataset=args.set_size)

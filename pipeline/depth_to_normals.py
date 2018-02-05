@@ -11,10 +11,14 @@ _f2m = Parameter( torch.Tensor([ [-1,     0,      1],
                                 [-2,     0,      2],
                                 [-1,     0,      1]]) / 8 )
 
-_f1m = _f1m.unsqueeze(0).unsqueeze(0).cuda()
-_f2m = _f2m.unsqueeze(0).unsqueeze(0).cuda()
+_f1m = _f1m.unsqueeze(0).unsqueeze(0)
+_f2m = _f2m.unsqueeze(0).unsqueeze(0)
 
-_bias = Parameter( torch.zeros(1) ).cuda()
+_bias = Parameter( torch.zeros(1) )
+# _f1m = _f1m.unsqueeze(0).unsqueeze(0).cuda()
+# _f2m = _f2m.unsqueeze(0).unsqueeze(0).cuda()
+#
+# _bias = Parameter( torch.zeros(1) ).cuda()
 _stride = (1,1)
 _padding = (1,1)
 

@@ -22,7 +22,8 @@ def visualize_shader(model, loader, save_path, save_raw = False):
         targets = []
         for ind, tensors in enumerate(loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            inp = [ Variable( t.float() ) for t in tensors[:-1] ]
+            # inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
             targ = tensors[-1].float()
             pred = model.forward(*inp).data
 
@@ -59,14 +60,16 @@ def visualize_relit_shader(model, loader, save_path, params, save_raw = False):
         targets = []
         for ind, tensors in enumerate(loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            # inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            inp = [ Variable( t.float()) for t in tensors[:-1] ]
             targ = tensors[-1].float()
             normals = inp[0]
             num_lights = normals.size(0)
 
             for param in params:
                 # pdb.set_trace()
-                lights = Variable( torch.Tensor(param).cuda().repeat(num_lights,1) )
+                # lights = Variable( torch.Tensor(param).cuda().repeat(num_lights,1) )
+                lights = Variable( torch.Tensor(param).repeat(num_lights,1) )
                 print(normals.size(), lights.size())
                 # pdb.set_trace()
                 pred = model.forward(normals, lights).data
@@ -108,7 +111,8 @@ def visualize_decomposer(model, loader, save_path, epoch, save_raw = False):
     # refl_targets = []
     # shape_targets = []
 
-    criterion = nn.MSELoss(size_average=True).cuda()
+    # criterion = nn.MSELoss(size_average=True).cuda()
+    criterion = nn.MSELoss(size_average=True)
     refl_loss = 0
     shape_loss = 0
     lights_loss = 0
@@ -116,7 +120,8 @@ def visualize_decomposer(model, loader, save_path, epoch, save_raw = False):
     images = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float()) for t in tensors]
+        # tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ = tensors
 
         refl_pred, depth_pred, shape_pred, lights_pred = model.forward(inp, mask)
@@ -170,7 +175,8 @@ def visualize_decomposer_full(model, loader, save_path):
     # shape_targets = []
 
 
-    criterion = nn.MSELoss(size_average=True).cuda()
+    # criterion = nn.MSELoss(size_average=True).cuda()
+    criterion = nn.MSELoss(size_average=True)
     refl_loss = 0
     shape_loss = 0
     lights_loss = 0
@@ -179,7 +185,8 @@ def visualize_decomposer_full(model, loader, save_path):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        # tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ = tensors
 
         refl_pred, depth_pred, shape_pred, lights_pred = model.forward(inp, mask)
@@ -228,7 +235,8 @@ def visualize_composer(model, loader, save_path, epoch, raw=False):
     render = pipeline.Render()
     images = []
 
-    criterion = nn.MSELoss(size_average=True).cuda()
+    # criterion = nn.MSELoss(size_average=True).cuda()
+    criterion = nn.MSELoss(size_average=True)
     recon_loss = 0
     refl_loss = 0
     depth_loss = 0
@@ -240,7 +248,8 @@ def visualize_composer(model, loader, save_path, epoch, raw=False):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        # tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ, shad_targ = tensors
         depth_normals_targ = pipeline.depth_to_normals(depth_targ.unsqueeze(1), mask=mask)
         # depth_normals_targ
@@ -331,7 +340,8 @@ def visualize_composer_alt(model, loader, save_path, epoch, raw=False):
     render = pipeline.Render()
     images = []
 
-    criterion = nn.MSELoss(size_average=True).cuda()
+    # criterion = nn.MSELoss(size_average=True).cuda()
+    criterion = nn.MSELoss(size_average=True)
     recon_loss = 0
     refl_loss = 0
     depth_loss = 0
@@ -343,7 +353,8 @@ def visualize_composer_alt(model, loader, save_path, epoch, raw=False):
     masks = []
 
     for ind, tensors in enumerate(loader):
-        tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        # tensors = [Variable(t.float().cuda(async=True)) for t in tensors]
+        tensors = [Variable(t.float()) for t in tensors]
         inp, mask, refl_targ, depth_targ, shape_targ, lights_targ, shad_targ = tensors
         depth_normals_targ = pipeline.depth_to_normals(depth_targ.unsqueeze(1), mask=mask)
         # depth_normals_targ

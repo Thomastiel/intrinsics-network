@@ -8,7 +8,8 @@ class Trainer:
     def __init__(self, model, loader, lr):
         self.model = model
         self.loader = loader
-        self.criterion = nn.MSELoss(size_average=True).cuda()
+        # self.criterion = nn.MSELoss(size_average=True).cuda()
+        self.criterion = nn.MSELoss(size_average=True)
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
 
     def __epoch(self):
@@ -18,8 +19,10 @@ class Trainer:
 
         for ind, tensors in enumerate(self.loader):
 
-            inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
-            targ = Variable( tensors[-1].float().cuda(async=True) )
+            inp = [ Variable( t.float() ) for t in tensors[:-1] ]
+            # inp = [ Variable( t.float().cuda(async=True) ) for t in tensors[:-1] ]
+            targ = Variable( tensors[-1].float() )
+            # targ = Variable( tensors[-1].float().cuda(async=True) )
 
             self.optimizer.zero_grad()
             out = self.model.forward(*inp)

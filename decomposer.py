@@ -34,7 +34,8 @@ args = parser.parse_args()
 pipeline.initialize(args)
 
 ## load model : image --> reflectance x normals x depth x lighting 
-model = models.Decomposer().cuda()
+model = models.Decomposer()
+# model = models.Decomposer().cuda()
 
 ## get a data loader for train and val sets
 train_set = pipeline.IntrinsicDataset(args.data_path, args.train_sets, args.intrinsics, array=args.array, size_per_dataset=args.num_train)

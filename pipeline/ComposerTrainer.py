@@ -8,7 +8,8 @@ class ComposerTrainer:
     def __init__(self, model, loader, lr, lights_mult, un_mult, lab_mult, transfer, relight_fn=None, relight_sigma=1, relight_mult=0.1, normals_fn=None, correspondence_mult=0, style_fn=None, style_mult=1e-9, epoch_size=15000, iters=1):
         self.model = model
         self.loader = loader
-        self.criterion = nn.MSELoss(size_average=True).cuda()
+        # self.criterion = nn.MSELoss(size_average=True).cuda()
+        self.criterion = nn.MSELoss(size_average=True)
         self.iters = iters
 
         ## update only selected parameters
@@ -45,8 +46,10 @@ class ComposerTrainer:
         losses = pipeline.AverageMeter(9)
 
         for ind, (unlabeled, labeled) in enumerate(self.loader):
-            unlabeled = [Variable(t.float().cuda(async=True)) for t in unlabeled]
-            labeled = [Variable(t.float().cuda(async=True)) for t in labeled]
+            # unlabeled = [Variable(t.float().cuda(async=True)) for t in unlabeled]
+            # labeled = [Variable(t.float().cuda(async=True)) for t in labeled]
+            unlabeled = [Variable(t.float()) for t in unlabeled]
+            labeled = [Variable(t.float()) for t in labeled]
             un_inp, un_mask = unlabeled
             lab_inp, lab_mask, lab_refl_targ, lab_depth_targ, lab_shape_targ, lab_lights_targ, lab_shad_targ = labeled
 
@@ -81,7 +84,8 @@ class ComposerTrainer:
             if self.relight_fn:
                 relit = self.relight_fn(self.model.shader, un_shape_pred, un_lights_pred, 2, sigma=self.relight_sigma)
                 relit_mean = relit.mean(0).squeeze()[:,0]
-                relight_loss = self.criterion(un_shad_pred, relit_mean.detach().cuda() )
+                # relight_loss = self.criterion(un_shad_pred, relit_mean.detach().cuda() )
+                relight_loss = self.criterion(un_shad_pred, relit_mean.detach())
                 loss += (self.relight_mult * relight_loss)
             else:
                 relight_loss = Variable( torch.zeros(1) )

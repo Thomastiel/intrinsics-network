@@ -27,7 +27,8 @@ args = parser.parse_args()
 pipeline.initialize(args)
 
 ## load model : shape x lighting --> shading
-shader = models.Shader().cuda()
+shader = models.Shader()
+# shader = models.Shader().cuda()
 
 ## get a data loader for train and val sets
 train_set = pipeline.IntrinsicDataset(args.data_path, args.train_sets, args.intrinsics, size_per_dataset=args.num_train)

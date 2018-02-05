@@ -28,11 +28,14 @@ if __name__ == '__main__':
     shader_path = '../logs/separated_shader_0.01/model.t7'
     decomposer = torch.load(decomposer_path)
     shader = torch.load(shader_path)
-    composer = Composer(decomposer, shader).cuda()
-    print composer
+    # composer = Composer(decomposer, shader).cuda()
+    composer = Composer(decomposer, shader)
+    print(composer)
     # pdb.set_trace()
-    inp = Variable(torch.randn(5,3,256,256).cuda())
-    mask = Variable(torch.randn(5,3,256,256).cuda())
+    # inp = Variable(torch.randn(5,3,256,256).cuda())
+    # mask = Variable(torch.randn(5,3,256,256).cuda())
+    inp = Variable(torch.randn(5,3,256,256))
+    mask = Variable(torch.randn(5,3,256,256))
 
     out = composer.forward(inp, mask)
 
