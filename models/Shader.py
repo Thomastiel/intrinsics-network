@@ -78,7 +78,7 @@ if __name__ == '__main__':
     lights = Variable(torch.randn(5,4))
     shader = Shader()
     out = shader.forward(shape, lights)
-    print out.size()
+    print(out.size())
 
 
 

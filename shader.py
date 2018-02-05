@@ -39,11 +39,11 @@ val_loader = torch.utils.data.DataLoader(val_set, batch_size=32, num_workers=4, 
 trainer = pipeline.Trainer(shader, train_loader, args.lr)
 
 for epoch in range(args.num_epochs):
-    print '<Main> Epoch {}'.format(epoch)
+    print('<Main> Epoch {}'.format(epoch))
 
     ## save model and state
-    torch.save( shader, open(os.path.join(args.save_path, 'model.t7'), 'w') )
-    torch.save( shader.state_dict(), open(os.path.join(args.save_path, 'state.pth'), 'w') )
+    torch.save( shader, open(os.path.join(args.save_path, 'model.t7'), 'wb') )
+    torch.save( shader.state_dict(), open(os.path.join(args.save_path, 'state.pth'), 'wb') )
     
     ## visualize predictions of shader
     save_path =  os.path.join(args.save_path, str(epoch) + '.png')

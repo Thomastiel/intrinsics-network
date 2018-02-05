@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     out = composer.forward(inp, mask)
 
-    print [i.size() for i in out]
+    print([i.size() for i in out])
 
     # pdb.set_trace()
 

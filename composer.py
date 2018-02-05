@@ -2,7 +2,7 @@
 
 import sys, os, argparse, torch, pdb
 sys.path.append('/om/user/janner/mit/urop/intrinsic/pytorch/')
-import models, pipeline, style
+import models, pipeline
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--decomposer',         type=str,   default='saved/vector_depth_state_decomp_0.001lr_0.1lights/state.t7',
@@ -76,19 +76,19 @@ logger = pipeline.Logger(['recon', 'refl', 'depth', 'shape', 'lights', 'shading'
 param_updater = pipeline.ParamUpdater(args.transfer)
 
 for epoch in range(args.num_epochs):
-    print '<Main> Epoch {}'.format(epoch)
+    print('<Main> Epoch {}'.format(epoch))
 
     if param_updater.check(epoch):
         ## update which parameters are updated
         transfer = param_updater.refresh(epoch)
-        print 'Updating params: ', epoch, transfer
+        print('Updating params: ', epoch, transfer)
         ## get a new trainer with different learnable parameters
         trainer = pipeline.ComposerTrainer( model, train_loader, args.lr, args.lights_mult, args.un_mult, args.lab_mult, transfer, 
                                     epoch_size=args.epoch_size, iters=args.iters)
 
     if args.save_model:
         state = model.state_dict()
-        torch.save( state, open(os.path.join(args.save_path, 'state.t7'), 'w') )
+        torch.save( state, open(os.path.join(args.save_path, 'state.t7'), 'wb') )
 
     
     ## visualize intrinisc image predictions and reconstructions of the val set

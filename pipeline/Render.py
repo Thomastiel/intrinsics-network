@@ -13,12 +13,12 @@ class Render:
         np.save(lights_path, lights)
 
         num_lights = lights.shape[0]
-        print 'Rendering {} lights...'.format(num_lights)
+        print('Rendering {} lights...'.format(num_lights))
         self.__blender(lights_path, write_path, verbose)
 
         images = self.__read_images(write_path, num_lights)
         if verbose:
-            print 'Deleting {}\n'.format(write_path)
+            print('Deleting {}\n'.format(write_path))
         self.__rmdir(write_path)
         return Variable( torch.Tensor(images.transpose(0,3,1,2)[:,:3]) )
 
@@ -31,13 +31,13 @@ class Render:
 
     def __blender(self, lights_path, write_path, verbose):
         # script_path = '../dataset/vis_lights.py'
-        script_path = '/om/user/janner/mit/urop/intrinsic/dataset/vis_lights.py'
-        command =   [   '/om/user/janner/blender-2.76b-linux-glibc211-x86_64/blender', 
+        script_path = '/Users/thomastiel/Projects/Thesis/intrinsics-network/dataset/deprecated/vis_lights.py'
+        command =   [   '/Applications/Blender/blender.app/Contents/MacOS/blender',
                         '--background', '-noaudio', '--python', script_path, '--', \
                         '--lights_path', lights_path, '--save_path', write_path]
         if verbose:
             stdout = None
-            print command
+            print(command)
         else:
             stdout = open( os.path.join(write_path, 'log.txt'), 'w')
 
