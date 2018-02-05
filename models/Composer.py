@@ -29,7 +29,7 @@ if __name__ == '__main__':
     decomposer = torch.load(decomposer_path)
     shader = torch.load(shader_path)
     composer = Composer(decomposer, shader).cuda()
-    print composer
+    print(composer)
     # pdb.set_trace()
     inp = Variable(torch.randn(5,3,256,256).cuda())
     mask = Variable(torch.randn(5,3,256,256).cuda())
